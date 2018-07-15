@@ -1,92 +1,262 @@
 package de.htwsaar.tictactoe.model;
 
+import java.util.ArrayList;
+
 public class Field {
     public int size;
-    public int gameField[][];
-    public int player;
+    public Tile[][] gameField;
+    public ArrayList<Player> players;
     public int winCondition;
 
-    public Field(int size, int winCondition)
+    public Field(int size, ArrayList<Player> players)
     {
-        gameField = new int[size][size];
-        player = 0;
-        this.winCondition = winCondition;
+        this.size = size;
+        gameField = new Tile[size][size];
+        this.players = players;
+        this.winCondition = players.size() + 1;
+    }
+
+    public boolean checkSetTile(Tile tile){
+        if(gameField[tile.getPos().getX()][tile.getPos().getY()] == null){
+            return true;
+            //current player == tile.owner?
+        } else {return false;}
+    }
+
+    public void setTile(Tile tile){
+        if(checkSetTile(tile)){
+            gameField[tile.getPos().getX()][tile.getPos().getY()] = tile;
+        } else {
+            throw new IllegalArgumentException("The position is already occupied!");
+        }
     }
 
 
-    public int checkWinner()
-    {
+    public Player checkWinner() {
         int count = 0;
+        int player1 = 0;
+        int player2 = 0;
+        int player3 = 0;
+        int player4 = 0;
 
-        //Horizontal Ueberpruefung
-        for(int i = 0; i < size; i++)
-        {
-            for(int j = 0; j < size ;j++)
-            {
-                //Spieler 1
-                if (gameField[i][j] == 1)
-                {
-                    if(player != 1)
-                        count = 0;
-                    player = 1;
-                    count++;
-                    if(count == winCondition)
-                        return player;
+        for (int i = 0; i < size; i++) {
+            switch (this.players.size()) {
+                case 2: {
+                    Player nr1 = this.players.get(0);
+                    Player nr2 = this.players.get(1);
+                    player1 = checkDiagonal(i, nr1);
+                    if (player1 == winCondition)
+                        return nr1;
+                    player2 = checkDiagonal(i, nr2);
+                    if (player2 == winCondition)
+                        return nr2;
+                    break;
                 }
-                //Spieler 2
-                else if (gameField[i][j] == 2)
-                {
-                    if(player != 2)
-                        count = 0;
-                    player = 2;
-                    count++;
-                    if(count == winCondition)
-                        return player;
+                case 3: {
+                    Player nr1 = this.players.get(0);
+                    Player nr2 = this.players.get(1);
+                    Player nr3 = this.players.get(2);
+                    player1 = checkDiagonal(i, nr1);
+                    if (player1 == winCondition)
+                        return nr1;
+                    player2 = checkDiagonal(i, nr2);
+                    if (player2 == winCondition)
+                        return nr2;
+                    player3 = checkDiagonal(i, nr3);
+                    if (player3 == winCondition)
+                        return nr3;
+                    break;
                 }
-                else
-                {
-                    player = 0;
-                    count = 0;
+                case 4: {
+                    Player nr1 = this.players.get(0);
+                    Player nr2 = this.players.get(1);
+                    Player nr3 = this.players.get(2);
+                    Player nr4 = this.players.get(3);
+                    player1 = checkDiagonal(i, nr1);
+                    if (player1 == winCondition)
+                        return nr1;
+                    player2 = checkDiagonal(i, nr2);
+                    if (player2 == winCondition)
+                        return nr2;
+                    player3 = checkDiagonal(i, nr3);
+                    if (player3 == winCondition)
+                        return nr3;
+                    player4 = checkDiagonal(i, nr4);
+                    if (player4 == winCondition)
+                        return nr4;
+                    break;
+                }
+                default:
+                    break;
+
+            }
+            for (int j = 0; j < size; j++) {
+                switch (this.players.size()) {
+                    case 2: {
+                        Player nr1 = this.players.get(0);
+                        Player nr2 = this.players.get(1);
+                        player1 = checkHorizontal(i, j, nr1);
+                        if (player1 == winCondition)
+                            return nr1;
+                        player2 = checkHorizontal(i, j, nr2);
+                        if (player2 == winCondition)
+                            return nr2;
+                        break;
+                    }
+                    case 3: {
+                        Player nr1 = this.players.get(0);
+                        Player nr2 = this.players.get(1);
+                        Player nr3 = this.players.get(2);
+                        player1 = checkHorizontal(i, j, nr1);
+                        if (player1 == winCondition)
+                            return nr1;
+                        player2 = checkHorizontal(i, j, nr2);
+                        if (player2 == winCondition)
+                            return nr2;
+                        player3 = checkHorizontal(i, j, nr3);
+                        if (player3 == winCondition)
+                            return nr3;
+                        break;
+                    }
+                    case 4: {
+                        Player nr1 = this.players.get(0);
+                        Player nr2 = this.players.get(1);
+                        Player nr3 = this.players.get(2);
+                        Player nr4 = this.players.get(3);
+                        player1 = checkHorizontal(i, j, nr1);
+                        if (player1 == winCondition)
+                            return nr1;
+                        player2 = checkHorizontal(i, j, nr2);
+                        if (player2 == winCondition)
+                            return nr2;
+                        player3 = checkHorizontal(i, j, nr3);
+                        if (player3 == winCondition)
+                            return nr3;
+                        player4 = checkHorizontal(i, j, nr4);
+                        if (player4 == winCondition)
+                            return nr4;
+                        break;
+                    }
+                    default:
+                        break;
+
+                }
+                switch (this.players.size()) {
+                    case 2: {
+                        Player nr1 = this.players.get(0);
+                        Player nr2 = this.players.get(1);
+                        player1 = checkVertical(i, j, nr1);
+                        if (player1 == winCondition)
+                            return nr1;
+                        player2 = checkVertical(i, j, nr2);
+                        if (player2 == winCondition)
+                            return nr2;
+                        break;
+                    }
+                    case 3: {
+                        Player nr1 = this.players.get(0);
+                        Player nr2 = this.players.get(1);
+                        Player nr3 = this.players.get(2);
+                        player1 = checkVertical(i, j, nr1);
+                        if (player1 == winCondition)
+                            return nr1;
+                        player2 = checkVertical(i, j, nr2);
+                        if (player2 == winCondition)
+                            return nr2;
+                        player3 = checkVertical(i, j, nr3);
+                        if (player3 == winCondition)
+                            return nr3;
+                        break;
+                    }
+                    case 4: {
+                        Player nr1 = this.players.get(0);
+                        Player nr2 = this.players.get(1);
+                        Player nr3 = this.players.get(2);
+                        Player nr4 = this.players.get(3);
+                        player1 = checkVertical(i, j, nr1);
+                        if (player1 == winCondition)
+                            return nr1;
+                        player2 = checkVertical(i, j, nr2);
+                        if (player2 == winCondition)
+                            return nr2;
+                        player3 = checkVertical(i, j, nr3);
+                        if (player3 == winCondition)
+                            return nr3;
+                        player4 = checkVertical(i, j, nr4);
+                        if (player4 == winCondition)
+                            return nr4;
+                        break;
+                    }
+                    default:
+                        break;
                 }
             }
         }
-
-        //Vertikale Ueberpruefung
-        for(int j = 0; j < size; j++)
-        {
-            for(int i = 0; i < size ;i++)
-            {
-                //Spieler 1
-                if (gameField[i][j] == 1)
-                {
-                    if(player != 1)
-                        count = 0;
-                    player = 1;
-                    count++;
-                    if(count == winCondition)
-                        return player;
-                }
-                //Spieler 2
-                else if (gameField[i][j] == 2)
-                {
-                    if(player != 2)
-                        count = 0;
-                    player = 2;
-                    count++;
-                    if(count == winCondition)
-                        return player;
-                }
-                else
-                {
-                    player = 0;
-                    count = 0;
-                }
+        return null;
+    }
+    private int checkHorizontal(int i, int j, Player player){
+        int playerCount = 0;
+        if(gameField[i][j].getType() == player.getTileType()){
+            if(j == 0 && gameField[i][j+1].getType() == player.getTileType()){
+                playerCount++;
+            } else {
+                playerCount = 0;
+            }
+            if(j != 0 && j < size-1 && gameField[i][j+1].getType() == player.getTileType() && gameField[i][j-1].getType() == player.getTileType()){
+                playerCount++;
+            } else {
+                playerCount = 0;
+            }
+            if(j != 0 && j == size-1 && gameField[i][j-1].getType() == player.getTileType()){
+                playerCount++;
+            } else {
+                playerCount = 0;
             }
         }
-        //Kein Gewinner
-
-        return player = 0;
+        return playerCount;
     }
 
+    private int checkVertical(int i, int j, Player player){
+        int playerCount = 0;
+        if(gameField[i][j].getType() == player.getTileType()){
+            if(i == 0 && gameField[i+1][j].getType() == player.getTileType()){
+                playerCount++;
+            } else {
+                playerCount = 0;
+            }
+            if(i != 0 && i < size-1 && gameField[i+1][j].getType() == player.getTileType() && gameField[i-1][j].getType() == player.getTileType()){
+                playerCount++;
+            } else {
+                playerCount = 0;
+            }
+            if(i != 0 && i == size-1 && gameField[i-1][j].getType() == player.getTileType()){
+                playerCount++;
+            } else {
+                playerCount = 0;
+            }
+        }
+        return playerCount;
+    }
 
+    private int checkDiagonal(int i, Player player){
+        int playerCount = 0;
+        if(gameField[i][i].getType() == player.getTileType()){
+            if(i == 0 && gameField[i+1][i+1].getType() == player.getTileType()){
+                playerCount++;
+            } else {
+                playerCount = 0;
+            }
+            if(i != 0 && i < size-1 && gameField[i+1][i+1].getType() == player.getTileType() && gameField[i-1][i-1].getType() == player.getTileType()){
+                playerCount++;
+            } else {
+                playerCount = 0;
+            }
+            if(i != 0 && i == size-1 && gameField[i-1][i-1].getType() == player.getTileType()){
+                playerCount++;
+            } else {
+                playerCount = 0;
+            }
+        }
+        return playerCount;
+    }
 }

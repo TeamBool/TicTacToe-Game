@@ -1,9 +1,8 @@
-package de.unisaarland.sopra.messages;
+package de.htwsaar.tictactoe.messages;
 
-import de.unisaarland.sopra.Client;
-import de.unisaarland.sopra.comm.ClientConnection;
-import de.unisaarland.sopra.model.Game;
-
+import de.htwsaar.tictactoe.Client;
+import de.htwsaar.tictactoe.connection.ClientConnection;
+import de.htwsaar.tictactoe.model.Game;
 
 /**
  * Created by Team14 on 9/12/16.

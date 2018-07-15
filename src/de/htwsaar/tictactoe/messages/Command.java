@@ -1,12 +1,9 @@
-package de.unisaarland.sopra.messages;
+package de.htwsaar.tictactoe.messages;
 
-import de.unisaarland.sopra.model.Game;
-import de.unisaarland.sopra.comm.ClientConnection;
-import de.unisaarland.sopra.comm.ServerConnection;
+import de.htwsaar.tictactoe.connection.ServerConnection;
+import de.htwsaar.tictactoe.model.Game;
 
-/**
- * Created by Team14 on 9/12/16.7
- */
+
 public interface Command {
     /**
      * Executes the command at the given {@link Game} instance.
@@ -26,7 +23,4 @@ public interface Command {
      * @param sc Connection to the clients
      */
     public void sendResults(ServerConnection sc);
-
-    public int getMonsterId();
-
 }
