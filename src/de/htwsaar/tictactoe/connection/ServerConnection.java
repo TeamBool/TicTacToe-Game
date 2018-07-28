@@ -150,7 +150,7 @@ public class ServerConnection<C> implements AutoCloseable {
                 throw new CommException("Die andere Seite der Verbindung ist bereits geschlossen!", var8);
             }
 
-            throw new CommException(String.format("Serverseitiger Commlibfehler %d! Bitte wenden Sie sich an Ihren Tutor!", var8.getErrorCode()), var8);
+            throw new CommException(String.format("Serverseitiger Commlibfehler %d!", var8.getErrorCode()), var8);
         } finally {
             this.outputBuffer.reset();
         }
