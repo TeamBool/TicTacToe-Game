@@ -49,18 +49,63 @@ public class Database {
         }
     }
 
-    public void querry() throws SQLException {
-        String SQL = "SELECT * FROM Persons";
-        Statement stmt = connection.createStatement();
-        ResultSet rs = stmt.executeQuery(SQL);
+    //Returns String array with ID/Username/Password
+    public String[] querry(String username) throws SQLException {
+        String SQL = "SELECT * FROM Users where Username = '" + username + "'";
+        Statement stmt = null;
+        String[] result = new String[3];
 
-        // Iterate through the data in the result set and display it.
-        while (rs.next()) {
-            System.out.println(rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4) + " " + rs.getString(5));
+        try {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(SQL);
+            
+            // Iterate through the data in the result set and display it.
+            while (rs.next()) {
+                result[0] = rs.getString("ID");
+                result[1] = rs.getString("Username");
+                result[2] = rs.getString("Password");
+            }
+        } finally {
+            if(stmt != null) stmt.close();
         }
+        return result;
     }
     
-    public void updateDB(String query) throws SQLException {
-        Statement stmt = connection.createStatement();
+    //True if username already exists, False if everything went well
+    public boolean insertInDB(String username, String password) throws SQLException {
+        Statement stmt = null;
+        Statement stmt3 = null;
+        PreparedStatement stmt2 = null;
+        boolean retval = true;
+
+       try {
+        //Check if Username exists
+        stmt3 = connection.createStatement();
+        String SQLTest = "SELECT * FROM Users where Username = '" + username + "'";
+        ResultSet rs = stmt3.executeQuery(SQLTest);
+        
+        //Doesn't exist
+        if(!rs.next()) {
+            //Look up MAXID and increment
+            final String SQL = "SELECT MAX(ID) AS MAXID FROM Users";
+            stmt = connection.createStatement();
+            ResultSet rs2 = stmt.executeQuery(SQL);
+            rs2.next();
+            int MAXID = rs2.getInt("MAXID");
+            MAXID++;
+            
+            //Insert new user into DB
+            stmt2 = connection.prepareStatement("INSERT INTO Users(ID, Username, Password) VALUES (?, ?, ?)");
+            stmt2.setInt(1, MAXID);
+            stmt2.setString(2, username);
+            stmt2.setString(3, password);
+            stmt2.executeUpdate();
+            retval = false;
+        }
+        return retval;
+       } finally {
+           if(stmt != null) stmt.close();
+           if(stmt2 != null) stmt.close();
+       }
     }
 }
