@@ -1,7 +1,7 @@
 package de.htwsaar.tictactoe.model;
 
 public interface Tile {
-    public enum TILE_TYPE {X, O, A, I};
+    public enum TILE_TYPE {X, O, A, I, EMPTY};
 
     public TILE_TYPE getType();
 

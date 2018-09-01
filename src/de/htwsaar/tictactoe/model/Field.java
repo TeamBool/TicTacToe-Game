@@ -17,7 +17,7 @@ public class Field {
     }
 
     public boolean checkSetTile(Tile tile){
-        if(gameField[tile.getPos().getX()][tile.getPos().getY()] == null){
+        if(gameField[tile.getPos().getX()][tile.getPos().getY()].getType() == Tile.TILE_TYPE.EMPTY){
             return true;
             //current player == tile.owner?
         } else {return false;}

@@ -25,7 +25,7 @@ public class ServerConnection<C> implements AutoCloseable {
     private final CommandFactory<? extends C> commandFactory;
     private boolean closed;
 
-    public ServerConnection(int port, int timeout, CommandFactory<? extends C> commandFactory) {
+    public ServerConnection(int port, CommandFactory<? extends C> commandFactory) {
         if (port <= 1023) {
             throw new IllegalArgumentException("Portnummer zu niedrig! (Siehe https://de.wikipedia.org/wiki/Transmission_Control_Protocol#Allgemeines)");
         } else if (port >= 65535) {
@@ -36,7 +36,7 @@ public class ServerConnection<C> implements AutoCloseable {
             this.packer = MessagePack.newDefaultPacker(this.outputBuffer);
             this.context = new ZContext();
             this.socket = this.context.createSocket(6);
-            this.socket.setReceiveTimeOut(timeout);
+            this.socket.setReceiveTimeOut(-1);
             this.socket.setRouterMandatory(true);
             this.socket.bind(String.format("tcp://*:%d", port));
         }
@@ -83,29 +83,27 @@ public class ServerConnection<C> implements AutoCloseable {
 
             try {
                 int type = this.unpacker.unpackInt();
-                String cry;
                 int y;
                 int x;
-                Direction direction;
                 switch(type) {
                     case 0:
-                        cry = this.unpacker.unpackString();
-                        MonsterType monsterType = MonsterType.valueOf(this.unpacker.unpackString());
-                        String teamName = this.unpacker.unpackString();
-                        return this.commandFactory.createRegister(commId(identity), cry, monsterType, teamName);
+                        return this.commandFactory.createRegister(commId(identity));
                     case 1:
                         return this.commandFactory.createWatch(commId(identity));
                     case 2:
-                        direction = Direction.valueOf(this.unpacker.unpackString());
-                        return this.commandFactory.createMove(commId(identity), direction);
+                        return this.commandFactory.createMove(commId(identity), x, y);
                     case 3:
-                        direction = Direction.valueOf(this.unpacker.unpackString());
-                        return this.commandFactory.createStab(commId(identity), direction);
-                    case 16:
-                        cry = this.unpacker.unpackString();
-                        return this.commandFactory.createWarCry(commId(identity), cry);
-                    case 17:
+                        return this.commandFactory.createGame(commId(identity));
+                    case 4:
+                        return this.commandFactory.gameFinished(commId(identity));
+                    case 5:
+                        return this.commandFactory.gamePaused(commId(identity));
+                    case 6:
                         return this.commandFactory.createDoneActing(commId(identity));
+                    case 7:
+                        return this.commandFactory.lostPassword(commId(identity));
+                    case 8:
+                        return this.commandFactory.chat(commId(identity));
                     default:
                         throw new CommException("Unbekannter Commandtyp!");
                 }
@@ -157,11 +155,10 @@ public class ServerConnection<C> implements AutoCloseable {
 
     }
 
-    public final void sendMoved(int commId, int actorId, Direction direction) {
+    public final void sendMoved(int commId, int actorId, int x, int y) {
         try {
             this.packer.packInt(2);
             this.packer.packInt(actorId);
-            this.packer.packString(direction.name());
             this.packer.flush();
             this.socket.sendMore(zmqId(commId));
             this.socket.send(this.outputBuffer.toByteArray());
@@ -247,21 +244,12 @@ public class ServerConnection<C> implements AutoCloseable {
         static final int REGISTER = 0;
         static final int WATCH = 1;
         static final int MOVE = 2;
-        static final int STAB = 3;
-        static final int SLASH = 4;
-        static final int CUT = 5;
-        static final int BITE = 6;
-        static final int STARE = 7;
-        static final int CLAW = 8;
-        static final int CRUSH = 9;
-        static final int SINGE = 10;
-        static final int SHOOT = 11;
-        static final int BURN = 12;
-        static final int CAST = 13;
-        static final int BLINK = 14;
-        static final int SWAP = 15;
-        static final int WARCRY = 16;
-        static final int DONEACTING = 17;
+        static final int CREATE_GAME = 3;
+        static final int GAME_FINISHED = 4;
+        static final int GAME_PAUSED = 5;
+        static final int DONE = 6;
+        static final int LOST_PW = 7;
+        static final int CHAT = 8;
 
         private Commands() {
         }

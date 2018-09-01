@@ -12,7 +12,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
 public class Userinterface extends Application {
-    
+
+    private String host;
+    private int port;
+
+    public Userinterface(String host, int port){
+        this.host = host;
+        this.port = port;
+    }
     
     public void start(Stage stage) throws Exception {
         try{
@@ -24,10 +31,6 @@ public class Userinterface extends Application {
             e.printStackTrace();
         }
     }
-    
-    
-    
-
     
     public static void main(String[] args) {
         launch(args);

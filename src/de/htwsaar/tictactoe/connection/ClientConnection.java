@@ -76,7 +76,6 @@ public class ClientConnection<E> implements AutoCloseable {
                 int value;
                 String teamName;
                 String message;
-                Direction direction;
                 switch (type) {
                     case 0:
                         boarId = this.unpacker.unpackInt();
@@ -103,12 +102,10 @@ public class ClientConnection<E> implements AutoCloseable {
         }
     }
 
-    public final void sendRegister(String name, MonsterType monsterType, String teamName) {
+    public final void sendRegister(String name) {
         try {
             this.packer.packInt(0);
             this.packer.packString(name);
-            this.packer.packString(monsterType.name());
-            this.packer.packString(teamName);
             this.packer.flush();
             this.socket.send(this.outputBuffer.toByteArray());
         } catch (MessagePackException | IOException var9) {
@@ -144,10 +141,11 @@ public class ClientConnection<E> implements AutoCloseable {
 
     }
 
-    public final void sendMove(Direction direction) {
+    public final void sendMove(int x, int y) {
         try {
             this.packer.packInt(2);
-            this.packer.packString(direction.name());
+            this.packer.packInt(x);
+            this.packer.packInt(y);
             this.packer.flush();
             this.socket.send(this.outputBuffer.toByteArray());
         } catch (MessagePackException | IOException var7) {
@@ -164,10 +162,10 @@ public class ClientConnection<E> implements AutoCloseable {
 
     }
 
-    public final void sendWarCry(String cry) {
+    public final void sendChat(String chat) {
         try {
-            this.packer.packInt(16);
-            this.packer.packString(cry);
+            this.packer.packInt(8);
+            this.packer.packString(chat);
             this.packer.flush();
             this.socket.send(this.outputBuffer.toByteArray());
         } catch (MessagePackException | IOException var7) {

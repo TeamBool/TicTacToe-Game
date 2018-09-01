@@ -1,5 +1,6 @@
 package de.htwsaar.tictactoe;
 
+import de.htwsaar.tictactoe.gui.Userinterface;
 import org.apache.commons.cli.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -69,7 +70,7 @@ public class main {
             String monster = line.hasOption("monster") ? line.getOptionValue("monster").toUpperCase() : null;
 
             // Create and start a human player
-            setupHumanPlayer(host, port);
+            //setupHumanPlayer(host, port);
         }
         else {
             exit("Invalid parameters! Use either -server, -ki, -test, -player or -gui");
@@ -238,9 +239,9 @@ public class main {
      * @param host    host
      * @param port    port
      */
-    private static void setupGui(String host, int port,) {
-        Gui gui = new Gui(host, port);
-        gui.run();
+    private static void setupGui(String host, int port) {
+        Userinterface gui = new Userinterface(host, port);
+        gui.main(null);
     }
 
     /**
@@ -249,12 +250,12 @@ public class main {
      * @param host     Name of the host
      * @param port     Port for connection
      */
-
+/*
     private static void setupHumanPlayer(String host, int port) {
         Player human = new Player(host, port);
         human.run();
     }
-
+*/
     /**
      * Builds all required options
      *

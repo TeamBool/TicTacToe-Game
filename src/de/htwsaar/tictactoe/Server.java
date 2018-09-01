@@ -1,40 +1,35 @@
 package de.htwsaar.tictactoe;
 
+import de.htwsaar.tictactoe.connection.ServerConnection;
+import de.htwsaar.tictactoe.messages.Command;
+import de.htwsaar.tictactoe.messages.CommandFactoryImpl;
+import de.htwsaar.tictactoe.model.Game;
+
+import java.util.HashMap;
+
 public class Server {
 
     private ServerConnection<Command> serverConnection;
     private CommIds commIds;
+    private boolean running = true;
+    private HashMap<Integer, Game> runnningGames = new HashMap<>(); //id, game
 
     /**
      * Creates a new instance of {@link Server} with given parameters.
      *
      * @param port      The port for the {@link ServerConnection}
-     * @param timeout   The timeout for the {@link ServerConnection}
-     * @param fightFile The read fightFile as {@link String}.
-     * @param mapFile   The read mapFile as {@link String}.
      */
-    public Server(int port, int timeout) {
+    public Server(int port) {
         super();
         commIds = new CommIds();
         CommandFactoryImpl cmdFactory = new CommandFactoryImpl(commIds);
-        serverConnection = new ServerConnection<>(port, timeout, cmdFactory);
-
-        try {
-
-        } catch (InvalidFightFileException | InvalidMapFileException exception) {
-            serverConnection.close();
-            running = false;
-            throw exception;
-        }
+        serverConnection = new ServerConnection<>(port, cmdFactory);
     }
 
     /**
      * Starts the {@link Server}.
      */
     public void run() {
-        registerState();
-        spawnFairies();
-
         while (running) {
 
         }

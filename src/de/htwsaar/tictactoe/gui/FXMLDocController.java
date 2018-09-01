@@ -1,6 +1,5 @@
-package de.htwsaar.tictactoe.gui;
+package userinterface;
 
-import java.util.ResourceBundle;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -15,35 +14,31 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+
 
 
 public class FXMLDocController {
     
     @FXML
     private Label lblstatus;
-    @FXML
-    private TextField txtpassword;
-    @FXML
-    private TextField txtusername;
-    private Connection conection;
-    private PreparedStatement statement;
-    private ResultSet resultset;
+   
+   /** Buttons und Logik fÃ¼r die Gui Bedienung
+     * @param event **/
     
-    
-    
-    
-    
-   /** Buttons und Logik für die Gui Bedienung **/
     public void handlebutlog(ActionEvent event)throws Exception {
         
         {
@@ -57,25 +52,9 @@ public class FXMLDocController {
         }
         
     }
-    /** Testlogin für die Gui**/
-    public void Login (ActionEvent event)throws Exception{
-           if(txtusername.getText().equals("user")&& txtpassword.getText().equals("pass")){
-               lblstatus.setText("login Success");
-               Stage stage = new Stage();
-               Parent root = FXMLLoader.load(getClass().getResource("/userinterface/main.fxml"));
-               //Scene scene = new Scene(root,500,350);
-               
-               stage.setScene(new Scene(root, 600,570));
-               stage.show();
-            ((Node)(event.getSource())).getScene().getWindow().hide();
-           }else {
-                lblstatus.setText("Login Failed");
-           }
+   
+   
     
-    
-    }
-
-
   public void signin(ActionEvent event)throws Exception {
        
         {
@@ -89,6 +68,7 @@ public class FXMLDocController {
         }
         
     }
+  
   public void gamebutton(ActionEvent event)throws Exception {
        
         {
@@ -102,6 +82,7 @@ public class FXMLDocController {
         }
         
     }
+ 
    public void gameroom(ActionEvent event)throws Exception {
        
         {
@@ -115,6 +96,7 @@ public class FXMLDocController {
         }
         
     }
+  
     public void backbutton(ActionEvent event)throws Exception {
        
         {
@@ -128,6 +110,7 @@ public class FXMLDocController {
         }
         
     }
+  
     public void backbutton2(ActionEvent event)throws Exception {
        
         {
@@ -152,51 +135,5 @@ public class FXMLDocController {
     }
     
     
-    
-    /** Finaller Login mit Datenbank conection FEHLERHAFT **/
-    
-    
-    private String getEmail(){
-        String email = "";
-        try{
-       
-        statement = conection.prepareStatement("");
-        statement.setString(1,txtusername.getText());
-        resultset = statement.executeQuery();
-        if(resultset.next())
-            email = resultset.getString(1);
-        resultset.close();
-                }catch(SQLException ex){
-                Logger.getLogger(FXMLDocController.class.getName()).log(Level.SEVERE,null,ex);
-                }
-        return email;
-    
-    }
-    
-    private String getPassword(){
-        String password = "";
-        try{
-       
-        statement = conection.prepareStatement("");
-        statement.setString(1,txtusername.getText());
-        resultset = statement.executeQuery();
-        if(resultset.next())
-            password = resultset.getString(1);
-        resultset.close();
-                }catch(SQLException ex){
-                Logger.getLogger(FXMLDocController.class.getName()).log(Level.SEVERE,null,ex);
-                }
-        return password;
-    
-    }
-    public void handleLogin(ActionEvent event) throws IOException{
-        if(txtusername.getText().equals(getEmail()) && txtpassword.getText().equals(getPassword())){
-        Stage stage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("userinterface/main.fxml"));
-        stage.setScene(new Scene(root, 600,570));
-        stage.show();
-            ((Node)(event.getSource())).getScene().getWindow().hide();
-        }
-    }
+  
 }
-    

@@ -57,5 +57,16 @@ public class Game {
     }
 
 
+    public void setPaused() {
+        //TODO
+    }
 
+    public boolean isPaused() {
+        //TODO
+        return false;
+    }
+
+    public void setRunning(boolean b) {
+        //TODO
+    }
 }

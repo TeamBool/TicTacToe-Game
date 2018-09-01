@@ -33,4 +33,34 @@ public class CommandFactoryImpl implements CommandFactory<Command> {
     public Command createDoneActing(int var1) {
         return null;
     }
+
+    @Override
+    public Command createMove(int var1, int var2, int var3) {
+        return null;
+    }
+
+    @Override
+    public Command createGame(int var1) {
+        return null;
+    }
+
+    @Override
+    public Command gameFinished(int var1) {
+        return null;
+    }
+
+    @Override
+    public Command gamePaused(int var1) {
+        return null;
+    }
+
+    @Override
+    public Command lostPassword(int var1) {
+        return null;
+    }
+    @Override
+    public Command chat(int var1) {
+        return null;
+    }
+
 }
