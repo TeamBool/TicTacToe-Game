@@ -78,20 +78,14 @@ public class ClientConnection<E> implements AutoCloseable {
                 String message;
                 switch (type) {
                     case 0:
-                        boarId = this.unpacker.unpackInt();
-                        message = this.unpacker.unpackString();
-                        MonsterType monsterType = MonsterType.valueOf(this.unpacker.unpackString());
-                        String teamName = this.unpacker.unpackString();
-                        int startNumber = this.unpacker.unpackInt();
                         int x = this.unpacker.unpackInt();
                         int y = this.unpacker.unpackInt();
-                        return this.eventFactory.createRegistered(boarId, message, monsterType, teamName, startNumber, x, y);
+                        return this.eventFactory.createRegistered(x, y);
                     case 1:
                         return this.eventFactory.createRegistrationAborted();
                     case 2:
                         boarId = this.unpacker.unpackInt();
-                        direction = Direction.valueOf(this.unpacker.unpackString());
-                        return this.eventFactory.createMoved(boarId, direction);
+                        return this.eventFactory.createMoved(boarId);
 
                     default:
                         throw new CommException("Unbekannter Eventtyp!");

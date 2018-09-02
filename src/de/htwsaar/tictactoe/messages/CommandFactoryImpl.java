@@ -35,6 +35,11 @@ public class CommandFactoryImpl implements CommandFactory<Command> {
     }
 
     @Override
+    public Command createWatch(int var1) {
+        return null;
+    }
+
+    @Override
     public Command createMove(int var1, int var2, int var3) {
         return null;
     }

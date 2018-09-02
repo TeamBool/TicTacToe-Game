@@ -146,7 +146,7 @@ public class main {
         try {
             Server server = new Server(port);
             server.run();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             exit("Error reading files:\n" + e.getMessage());
         }
