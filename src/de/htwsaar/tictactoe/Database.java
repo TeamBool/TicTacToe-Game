@@ -19,7 +19,6 @@ public class Database {
         DB_DRIVER = "org.sqlite.JDBC";
         Class.forName(DB_DRIVER).newInstance();
         DB_HOST = host;
-
     }
 
     private void connectLite() throws SQLException {
@@ -113,18 +112,23 @@ public class Database {
         return retval;
        } finally {
            if(stmt != null) stmt.close();
-           if(stmt2 != null) stmt.close();
+           if(stmt2 != null) stmt2.close();
        }
     }
 
     public void insertActiveGame(int gameID, String gameState, int userX, int userO, String turn) throws SQLException{
-        PreparedStatement stmt2 = connection.prepareStatement("INSERT INTO activeGames(gameID, userX, userO, status, turn) VALUES (?, ?, ?, ?, ?)");
-        stmt2.setInt(1, gameID);
-        stmt2.setInt(2, userX);
-        stmt2.setInt(3, userO);
-        stmt2.setString(4, gameState);
-        stmt2.setString(5, turn);
-        stmt2.executeUpdate();
+        PreparedStatement stmt2 = null;
+        try {
+            stmt2 = connection.prepareStatement("INSERT INTO activeGames(gameID, userX, userO, status, turn) VALUES (?, ?, ?, ?, ?)");
+            stmt2.setInt(1, gameID);
+            stmt2.setInt(2, userX);
+            stmt2.setInt(3, userO);
+            stmt2.setString(4, gameState);
+            stmt2.setString(5, turn);
+            stmt2.executeUpdate();
+        } finally {
+            if(stmt2 != null) stmt2.close();
+        }
     }
 
     public static void main(String[] args) {
